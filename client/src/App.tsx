@@ -3,6 +3,7 @@ import React, { useState } from "react";
 function App() {
   const [textAreaValue, setTextAreaValue] = useState("");
   const [uniqueWord, setUniqueWord] = useState(0);
+  const [charCount, setCharCount] = useState(0);
 
   const [originalTextValue, setOriginalTextValue] = useState("");
   const [newTextValue, setNewTextValue] = useState("");
@@ -21,6 +22,9 @@ function App() {
     const words = value.split(/[\s\W]+/).filter(Boolean);
     const uniqueWords = new Set(words.map((word) => word.toLowerCase()));
     setUniqueWord(uniqueWords.size);
+
+    const filteredText = value.replace(/[^a-zA-Z0-9]/g, '');
+    setCharCount(filteredText.length)
   }, 300);
 
   const handleTextArea = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -50,7 +54,7 @@ function App() {
             name="textarea"
             id="textarea"
             value={textAreaValue}
-            className="border-2 outline-0 w-full h-[200px] px-5 py-3 resize-none"
+            className="border-2 outline-0 w-full h-[200px] lg:h-[300px] px-5 py-3 resize-none"
             onChange={handleTextArea}
           ></textarea>
         </div>
@@ -86,9 +90,13 @@ function App() {
           </button>
         </form>
 
-        <div>
-          <div className="font-bold text-[20px]">
+        <div className="lg:flex items-center justify-between space-y-2 lg:space-y-0">
+          <div className="font-bold text-[16px] md:text-[20px]">
             Unique words: <span>{uniqueWord}</span>
+          </div>
+
+          <div className="font-bold text-[16px] md:text-[20px]">
+            Total Characters: <span>{charCount}</span>
           </div>
         </div>
       </div>
