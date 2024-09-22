@@ -31,12 +31,9 @@ function App() {
   const handleOnReplace = (e:any) => {
     e.preventDefault();
 
-    const splittedArray = textAreaValue.split(/[\s\W]+/).filter(Boolean);
-    const updatedArray = splittedArray.map((word: string) => {
-      return word === originalTextValue ? newTextValue : word;
-    });
+    const updatedText = textAreaValue.replace(new RegExp(`\\b${originalTextValue}\\b`, 'g'), newTextValue);
+    setTextAreaValue(updatedText);
 
-    setTextAreaValue(updatedArray.join(" "));
     setOriginalTextValue("");
     setNewTextValue("");
   };
