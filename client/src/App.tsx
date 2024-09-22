@@ -93,16 +93,6 @@ function App() {
           <div className="font-bold text-[20px]">
             Unique words: <span>{uniqueWord}</span>
           </div>
-          {/* <div>
-            Word Frequency:
-            <ul>
-              {Object.entries(wordFrequency).map(([word, count]) => (
-                <li key={word}>
-                  {word}: {count}
-                </li>
-              ))}
-            </ul>
-          </div> */}
         </div>
       </div>
     </div>
