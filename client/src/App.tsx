@@ -42,9 +42,9 @@ function App() {
   };
 
   return (
-    <div className="flex items-center justify-center h-[100vh]">
-      <div className="lg:w-[900px] 2xl:w-[1100px] m-auto space-y-5">
-        <div className="text-center font-bold text-[20px] mb-16">
+    <div className="flex items-center justify-center h-[100vh] py-5 px-2">
+      <div className="w-[330px] md:w-[500px] lg:w-[900px] 2xl:w-[1100px] m-auto space-y-5">
+        <div className="text-center font-bold text-[16px] md:text-[20px] mb:10 md:mb-16">
           Real-Time Text Analysis and String Replacement
         </div>
         <div className="space-y-2">
