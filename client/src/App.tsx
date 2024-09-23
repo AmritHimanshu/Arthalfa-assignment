@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 
 function App() {
   const [textAreaValue, setTextAreaValue] = useState("");
@@ -7,6 +7,9 @@ function App() {
 
   const [originalTextValue, setOriginalTextValue] = useState("");
   const [newTextValue, setNewTextValue] = useState("");
+  const [highlightedText, setHighlightedText] = useState("");
+
+  const editableDivRef = useRef<HTMLDivElement>(null);
 
   const debounce = (func: Function, delay: number) => {
     let timeoutId: NodeJS.Timeout;
@@ -23,22 +26,32 @@ function App() {
     const uniqueWords = new Set(words.map((word) => word.toLowerCase()));
     setUniqueWord(uniqueWords.size);
 
-    const filteredText = value.replace(/[^a-zA-Z0-9]/g, '');
+    const filteredText = value.replace(/[^a-zA-Z0-9]/g, "");
     setCharCount(filteredText.length);
   }, 300);
 
   // Function for counting unique words and total number of characters
-  const handleTextArea = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setTextAreaValue(e.target.value);
-    processText(e.target.value);
+  const handleTextArea = (e: React.FormEvent<HTMLDivElement>) => {
+    let value = e.currentTarget.textContent || "";
+    setTextAreaValue(value);
+    setHighlightedText(value);
+    processText(value);
   };
 
-  // Function for replacing functionality
-  const handleOnReplace = (e:any) => {
+  // Function for replacing functionality and highlighting
+  const handleOnReplace = (e: any) => {
     e.preventDefault();
 
-    const updatedText = textAreaValue.replace(new RegExp(`\\b${originalTextValue}\\b`, 'g'), newTextValue);
+    const updatedText = textAreaValue.replace(
+      new RegExp(`\\b${originalTextValue}\\b`, "g"),
+      `<mark>${newTextValue}</mark>`
+    );
+    setHighlightedText(updatedText);
     setTextAreaValue(updatedText);
+
+    if (editableDivRef.current) {
+      editableDivRef.current.innerHTML = updatedText;
+    }
 
     setOriginalTextValue("");
     setNewTextValue("");
@@ -52,13 +65,12 @@ function App() {
         </div>
         <div className="space-y-2">
           <label htmlFor="textarea">Enter your text: </label>
-          <textarea
-            name="textarea"
-            id="textarea"
-            value={textAreaValue}
-            className="border-2 outline-0 w-full h-[200px] lg:h-[300px] px-5 py-3 resize-none"
-            onChange={handleTextArea}
-          ></textarea>
+          <div
+            contentEditable
+            ref={editableDivRef}
+            className="border-2 outline-0 w-full h-[200px] lg:h-[300px] px-5 py-3 resize-none whitespace-pre-wrap"
+            onInput={handleTextArea}
+          ></div>
         </div>
 
         <form onSubmit={handleOnReplace} className="space-y-5">
