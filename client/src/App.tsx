@@ -24,14 +24,16 @@ function App() {
     setUniqueWord(uniqueWords.size);
 
     const filteredText = value.replace(/[^a-zA-Z0-9]/g, '');
-    setCharCount(filteredText.length)
+    setCharCount(filteredText.length);
   }, 300);
 
+  // Function for counting unique words and total number of characters
   const handleTextArea = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTextAreaValue(e.target.value);
     processText(e.target.value);
   };
 
+  // Function for replacing functionality
   const handleOnReplace = (e:any) => {
     e.preventDefault();
 
