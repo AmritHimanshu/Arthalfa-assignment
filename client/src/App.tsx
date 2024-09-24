@@ -7,7 +7,6 @@ function App() {
 
   const [originalTextValue, setOriginalTextValue] = useState("");
   const [newTextValue, setNewTextValue] = useState("");
-  const [highlightedText, setHighlightedText] = useState("");
 
   const editableDivRef = useRef<HTMLDivElement>(null);
 
@@ -21,12 +20,21 @@ function App() {
     };
   };
 
+  const stripHTMLTags = (text: string) => {
+    const div = document.createElement("div");
+    div.innerHTML = text;
+    return div.textContent || div.innerText || "";
+  };
+
   const processText = debounce((value: string) => {
-    const words = value.split(/[\s\W]+/).filter(Boolean);
+    const strippedText = stripHTMLTags(value);
+
+    const words = strippedText.split(/[\s\W]+/).filter(Boolean);
     const uniqueWords = new Set(words.map((word) => word.toLowerCase()));
     setUniqueWord(uniqueWords.size);
 
-    const filteredText = value.replace(/[^a-zA-Z0-9]/g, "");
+
+    const filteredText = strippedText.replace(/[^a-zA-Z0-9]/g, "");
     setCharCount(filteredText.length);
   }, 300);
 
@@ -34,7 +42,6 @@ function App() {
   const handleTextArea = (e: React.FormEvent<HTMLDivElement>) => {
     let value = e.currentTarget.textContent || "";
     setTextAreaValue(value);
-    setHighlightedText(value);
     processText(value);
   };
 
@@ -46,8 +53,9 @@ function App() {
       new RegExp(`\\b${originalTextValue}\\b`, "g"),
       `<mark>${newTextValue}</mark>`
     );
-    setHighlightedText(updatedText);
+
     setTextAreaValue(updatedText);
+    processText(updatedText);
 
     if (editableDivRef.current) {
       editableDivRef.current.innerHTML = updatedText;
